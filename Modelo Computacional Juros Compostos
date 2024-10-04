@@ -1,0 +1,30 @@
+## Programa teste da disciplina de modelagem computacional ##
+## Autor: Leonardo Ataídes dos Santos ##
+## Programa teste de Juros Compostos ##
+
+'''
+Vamos trabalhar a seguinte situação: Uma pessoa obteve uma dívida e recorreu a um empréstimo de R$22.000,00 parcelando
+em 24 vezes sobre a taxa de 0,82% ao mês. Entretanto, está pessoa utilizou o dinheiro de forma indevida no primeiro mês,
+assim a pessoa não consegue pagar parcelas. Com Base nisso iremos aplicar O Modelo de Juros Compostos para calcular a dívida.
+'''
+# PARA O CÁLCULO SE BASEA NO MODELO ABAIXO:
+# M = C x ( 1 + i )^n
+
+#Definição de parâmetros iniciais:
+m = 0 # Valor da Montante
+c = 22000 # Capital Inicial
+n = 24 # Tempo em meses
+i = 0.0082 # Taxa de juros
+valor_juros = 0 # valor aculado de juros 
+
+#Modelo Aplicado com os valores acima:
+m = c * ((1 + i) ** n)
+
+# Cálculo para saber quanto se acumulou em reais de juros:
+valor_juros = m - c
+
+print(f'O valor pego no empréstimo: R${c:.2f}') # Mostra o valor inicial do empréstimo
+print(f'O valor acumlado pelos juros: R${valor_juros:.2f}') # Mostra o valor acumulado pelos juros
+print(f'O valor da dívida a ser pago: R${m:.2f}') # Mostra o valor final do empréstimo com os juros acumulados
+
+
