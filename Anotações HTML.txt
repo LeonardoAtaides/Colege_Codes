@@ -538,10 +538,6 @@ E uma tag para definir uma data
 # Tag Aside
 E uma tag para colocar conteúdos laterais no site
 
-# Compatibilidade Com o Navegador Internet Explorer
-*Html Shiv* Ajuda O Explorer a compreender as tags mais recentes como, header, nav, footer e etc
-Link: https://github.com/aFarkas/html5shiv *para pegar os arquivos JavaScript*
-
 # Flex Box
 E um modo de layout, que torna a inclusão de elmentos dentro de um container de forma mais simples e flexivel. Usa-se a TAG <display:>
 **<display: flex;>** Com o flex permite você alterar as direções das colunas usando: <flex-direction:>
@@ -583,12 +579,63 @@ Permite que você defina a posção dos elementos usando: <justify-content>
 **Align-items**
 Permite que voçe ajuste a posição de um determinador container, sendo motidos sna vertical
 
-1° - *stretch*: É pcionamento que fica esticado
+1° - *stretch*: É posionamento que deixa os elementos na vertical esticados
 
-2° - *center*: 
+2° - *center*: É um posicionamento que deixa os elementos centralizados
 
-3° - *flex-start*: 
+3° - *flex-start*: É um posicionamento que deixa os elementos "colados" na parte superior
 
-4° - *flex-end*: 
+4° - *flex-end*: É um posicionamneto que deixa os elementos "colados" na parte inferior
 
-5° - *baseline*: 
+5° - *baseline*: É um posicionamento que utiliza a linha como base para realizar os alinhamento dos conteúdos
+
+# ORDEM DE ITENS
+Usa-se para definir a ordem de exibição do elemento, usando:
+*Obs: Todos elementos por padrão tem o valor 0*
+**Definidos por valores de 0, 1 ,2 3...**
+a tag <order: 0;>
+    |-> passa uma class
+Ex: .ordem1{
+    order: 1; |-> define um valor
+}
+*NOS ELEMENTOS:*
+Ex: Ordem decrescente 4, 3 , 2 , 1:
+
+<div class="item ordem4">01</div> | 04
+<div class="item ordem3">02</div> | 03
+<div class="item ordem2">03</div> | 02
+<div class="item ordem1">04</div> | 01
+
+# Flex Grow
+Usa-se para definir a proporção de espaço ocupado por um item, usando:
+A tag <flex-grow: 0;>
+**Definidos por valores de 0, 1 ,2 3...** Quanto maior o número maior
+o espaçamento ocupado pelo item
+
+Ex:
+.item              | Tamanho padrão
+    flex-grow: 0 ; |
+
+.item1          | Ele não tem mais um tamanho fixo como os
+flex-grow: 1;   | demais itens, crescendo até o final do container
+
+# Flex Shrink
+Usa-se para definir a capacidade de redução de tamanho do item
+A tag <flex-shrink: 1;>
+**Definidos por valores de 0, 1 ,2 3...** Quanto maior o número maior
+menor será a área ocupada quando se diminui a aba de navegação
+
+Ex:
+.item              | Tamanho padrão
+  flex-shrink: 1 ; |
+
+.item1          | Quanto maior o número mais ele irá
+flex-shrink: 2; | diminuir dentro do seu layout
+
+# Flex Basis
+Usa-se para indicar o tamanho inicial do flex item antes da distribuição
+do espaço restante
+
+Ex:
+flex-basis: 100px;  | "tomando o lugar" do *width* quando não definido
+    
