@@ -360,7 +360,7 @@ __Detalhes de Contato___
 |_______________________|
 
 # SELETOR DE ATRIBUTO []
-*input[type=text]* - desta forma seelciona apenas inputs com tipo "text"
+*input[type=text]* - desta forma seleciona apenas inputs com tipo "text"
 **sempre passando dentro de [] colchetes**
 
 # PARALLAX
