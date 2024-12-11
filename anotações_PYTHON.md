@@ -157,7 +157,7 @@ print(frase) - *amanhã e dia de trabalhar!*
 
 *FIND* - Serve para encontrar algo dentro da string
 **Retorna o índice onde inicia a palavra definida**
-Ex:
+Ex: 
 frase = 'Hoje e sábado ainda bem!'                     frase = 'Hoje e sábado ainda bem!'
 ffd = frase.find('ainda')                              frase.find('android') 
 print(ffd) - *[7]* (Onde começa a palavra 'ainda')     print(ffd) - [-1] ( Ou seja, Não existe)
@@ -1275,9 +1275,98 @@ def is_string(param): -> *Recebe um paramêtro*
         raise TypeError('paramêtro deve ser uma string')-> *Se não lança uma exceção*
 
 
-invert_string_arriving_param = create_fuction(invert_string)
-inverted = invert_string_arriving_param('123')
+invert_string_check_param = create_fuction(invert_string)
+inverted = invert_string_check_param('123')
 print(inverted) *321*
+
+# Syntax Sugar
+Decoradores são usados para fazer o Python usar as funções decoradoras em outras funções
+
+Ex:                                       *Está função e decoradora*
+________________________________________
+|def create_fuction(func):               | -> recebe uma função
+|def execute(*args,**kwargs ):           | -> Cria uma função interna(closure)
+|        for arg in args:                |
+|            is_string(arg)              |       
+|        result = func(*args, **kwargs)  |
+|        return result                   | -> Sendo possível alterar algo antes 
+|    return execute                      |       ou depois do resultado como:
+|                                        | *Adicionar/Remover/Restringir/Alterar*
+|________________________________________|
+
+|<-*@create_fuction* -> passa a função inverte_string para o seu escopo
+|def invert_string(string): -> 
+|    return string[::-1] 
+|
+|def is_string(param): -> *Recebe um paramêtro*
+|    if not isinstance(param, str): -> *Verifica se é string*
+|        raise TypeError('paramêtro deve ser uma string')-> *Se não lança uma exceção*
+|       _______________________________________________________________________
+|----->|Não sendo necessário criar uma variável para receber *create_fuction* e |
+       |*inverted_string* pois está tudo integrado na função inverted_string e  |
+       |acima dela passamos *@Syntax Sugar*(linha1297) pra isso acontecer       |   
+       |A Função *inverted_string* passa a ser a função *execute*,por isso      |
+       |executado oque está dentro do escopo definido dentro dela               |
+       |________________________________________________________________________|
+
+        ANTES:
+invert_string_check_param = create_fuction(invert_string)
+inverted = invert_string_check_param('123')
+print(inverted) *321*
+
+        DEPOIS:
+inverted = invert_string('123')
+print(inverted) *321*
+
+
+# Decorator com Paramêtros:
+Cria como uma especie de fábrica onde o decoradores:
+Ex:                                             ___________________________________________
+def factory_decorator(a=None, b=None, c=None): | -> O principal recebe os argumentos       |
+    def factory_fuctions(func):                | -> O 2° recebe a função                   |
+        print('Decorator')                     |                                           |
+                                               |                                           |
+        def nested(*args, **kwargs):           | -> O 3° faz que adiar a execução da função|
+            print('Nested')                    | e passa a ser a função "nova" pois foi    |
+            result = func(*args, **kwargs)     | passado o *Sytax Sugar*                   |
+            return result                      |___________________________________________|
+        return nested
+    return factory_fuctions
+
+@factory_decorator()
+def sum(x, y):
+    return x + y
+                                                    ________________________________________
+multiply = factory_decorator()(lambda x, y: x * y) | Deste modo fica mais fácil criar       |
+                                                   | novas funções                          |
+ten_plus_five = sum(10, 5)                         |________________________________________|
+ten_times_five = multiply(10, 5)
+print(ten_plus_five)
+print(ten_times_five)
+
+# Ordem dos decoaradores
+*Sempre são exeutados de baixo pra cima:*
+def parametros_decorador(nome):
+    def decorador(func):
+        print('Decorador:', nome)
+        def sua_nova_funcao(*args, **kwargs):
+            res = func(*args, **kwargs)
+            final = f'{res} {nome}'
+            return final
+        return sua_nova_funcao
+    return decorador
+__________________________________
+| @parametros_decorador(nome='5') |
+| @parametros_decorador(nome='4') |
+| @parametros_decorador(nome='3') | -> Então a ordem fica desta forma
+| @parametros_decorador(nome='2') |
+| @parametros_decorador(nome='1') |
+|_________________________________|
+def soma(x, y):
+    return x + y
+dez_mais_cinco = soma(10, 5)
+print(dez_mais_cinco) *15 1 2 3 4 5*
+
 
 
 
