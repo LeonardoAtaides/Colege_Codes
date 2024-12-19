@@ -1344,7 +1344,7 @@ ten_times_five = multiply(10, 5)
 print(ten_plus_five)
 print(ten_times_five)
 
-# Ordem dos decoaradores
+# Ordem dos decoradores
 *Sempre são exeutados de baixo pra cima:*
 def parametros_decorador(nome):
     def decorador(func):
@@ -1367,9 +1367,59 @@ def soma(x, y):
 dez_mais_cinco = soma(10, 5)
 print(dez_mais_cinco) *15 1 2 3 4 5*
 
+# MAX E MIN
+São funções que verificam o valor máximo e minímo entre elementos
+print(max(2, 7)) - *7* o maior valor
+print(min(1, 10)) *1* o menor valor
 
+# ZIP
+Que faz uma união de elementos de acordo com seus índices 0 e 0, 1 e 1
+**Retorna um interator, sendo possível apenas ver o valor fazendo um for**
+**ou declarando dentro de list() podendo ver os valores**
+*USA O VALOR DA LISTA MENOR*
+Ex:
+list_one = ['Salvador', 'Ubatuba', 'Belo Horizonte']
+list_two = ['BA', 'SP', 'MG', 'RJ']
+print(list(zip(list_one,list_two)))*[('Salvador', 'BA'), ('Ubatuba', 'SP'), ('Belo Horizonte', 'MG')]*
 
+# ZIP LONGEST
+Que faz uma união de elementos de acordo com seus índices e uma biblioteca
+do *itertools* , **from itertools import zip_longest**
+Mais faz a interação sobre a lista maior
+Ex:
 
+from itertools import zip_longest                     _____________________________________
+list_one = ['Salvador', 'Ubatuba', 'Belo Horizonte']  | Neste caso a interação será feita  |
+list_two = ['BA', 'SP', 'MG', 'RJ']                   | sobre a list_two, faltando um valor|
+                                                      | onde vai ser tratado pelo fillvalue|
+                                                      |____________________________________|
+print(list(zip_longest(list_one,list_two,fillvalue='SEM CIDADE')))
+*[('Salvador', 'BA'), ('Ubatuba', 'SP'), ('Belo Horizonte', 'MG'), (SEM CIDADE, 'RJ')]* 
+
+# COUNT
+É um iterador sem fim(sendo infinito), diferente do range
+**Ele está na biblioteca intertools** 
+*from intertools import count*
+Ex:
+from itertools import count
+c1 = count()
+
+for i in c1:        
+    if i > 10:      | Necessário passar uma condição a ele pois se não
+        break       | irá executar infinitamente como um *WHILE TRUE:*
+    print(i)
+**Pode passar dois paramêtros para o COUNT**
+Ex:            |-> define o "jump" entre os números
+c1 = count(2, 2) 
+           |-> define o número de onde irá iniciar
+
+print(i)*2 4 6 8 10*
+
+**Pode definir argumentos nomeados** 
+    *start=* --------- *step=*
+      |-> inicio         |-> pulo
+Ex:
+c1 = count(start=2, step=2)
 
 
 
@@ -1385,7 +1435,7 @@ try:
     print('Deu certo meu script!')
 except:
     print('Não deu certo')
-finally:
+finally:                                                       
     print('Vai ser executado da mesma forma!!!')
 
 # ESTRUTURA DE CLASSES/OBJETOS - UMA CLASSE É COMO UM CONSTRUTOR DE OBJETOS, OU UM 'PROJETO' PARA CRIAR OBJETOS
