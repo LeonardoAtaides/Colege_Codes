@@ -1,5 +1,3 @@
-// Programa 3
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -10,7 +8,6 @@
 
 const char* sensores[NUM_SENSORES] = {"TEMP", "PRES", "VIBR", "UMID", "FLUX"};
 
-// Função para gerar um timestamp aleatório no dia escolhido
 time_t gerar_timestamp_aleatorio(int dia, int mes, int ano) {
     struct tm t;
     t.tm_year = ano - 1900;
@@ -47,7 +44,7 @@ int main() {
         return 1;
     }
 
-    srand(time(NULL)); // Inicializar aleatório
+    srand(time(NULL));
 
     for (int i = 0; i < NUM_SENSORES; i++) {
         for (int j = 0; j < NUM_LEITURAS_POR_SENSOR; j++) {
@@ -57,7 +54,7 @@ int main() {
             fprintf(arquivo, "%ld %s %.2f\n", timestamp, sensores[i], valor);
         }
     }
-
+    
     fclose(arquivo);
 
     printf("Arquivo 'entrada.txt' gerado com sucesso!\n");
