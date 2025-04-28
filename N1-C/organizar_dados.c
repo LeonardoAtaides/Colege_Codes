@@ -22,7 +22,6 @@ typedef struct {
 Sensor sensores[MAX_SENSORES];
 int quantidade_sensores = 0;
 
-// Função para comparar as leituras
 int comparar_leituras(const void *a, const void *b) {
     Leitura *l1 = (Leitura *)a;
     Leitura *l2 = (Leitura *)b;
@@ -31,7 +30,6 @@ int comparar_leituras(const void *a, const void *b) {
     return 0;
 }
 
-// Função para criar a pasta de destino se ela não existir
 void criar_pasta(const char *pasta) {
     struct stat st = {0};
     if (stat(pasta, &st) == -1) {
@@ -39,7 +37,6 @@ void criar_pasta(const char *pasta) {
     }
 }
 
-// Função para encontrar ou criar um sensor
 int encontrar_ou_criar_sensor(const char *nome_sensor) {
     for (int i = 0; i < quantidade_sensores; i++) {
         if (strcmp(sensores[i].nome, nome_sensor) == 0) {
@@ -68,8 +65,7 @@ int main() {
     long timestamp;
     char id_sensor[MAX_NOME_SENSOR];
     float valor;
-
-    // Lê as leituras do arquivo
+    
     while (fscanf(entrada, "%ld %s %f", &timestamp, id_sensor, &valor) == 3) {
         int indice = encontrar_ou_criar_sensor(id_sensor);
         sensores[indice].leituras[sensores[indice].quantidade].timestamp = timestamp;
@@ -79,22 +75,18 @@ int main() {
 
     fclose(entrada);
 
-    // Para cada sensor, ordena as leituras e salva os dados em arquivos
     for (int i = 0; i < quantidade_sensores; i++) {
         qsort(sensores[i].leituras, sensores[i].quantidade, sizeof(Leitura), comparar_leituras);
 
-        // Define o nome do arquivo para o sensor
         char nome_arquivo[MAX_NOME_SENSOR + 25];
         sprintf(nome_arquivo, "dados_sensores/%s.txt", sensores[i].nome);
 
-        // Abre o arquivo para salvar os dados
         FILE *saida = fopen(nome_arquivo, "w");
         if (!saida) {
             printf("Erro ao criar o arquivo %s.\n", nome_arquivo);
             continue;
         }
 
-        // Escreve as leituras ordenadas no arquivo
         for (int j = 0; j < sensores[i].quantidade; j++) {
             fprintf(saida, "%ld %s %.2f\n", sensores[i].leituras[j].timestamp, sensores[i].nome, sensores[i].leituras[j].valor);
         }
