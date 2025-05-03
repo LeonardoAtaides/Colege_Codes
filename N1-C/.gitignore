@@ -1,6 +1,5 @@
-.vscode/
+./.vscode
 build
 output
-entrada.txt
 dados_sensores
 gerar_arquivo.exe

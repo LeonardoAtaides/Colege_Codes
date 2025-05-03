@@ -3,6 +3,7 @@
 #include <string.h>
 #include <locale.h>
 #include <sys/stat.h>
+#include <windows.h> 
 
 #define MAX_SENSORES 100
 #define MAX_NOME_SENSOR 20
@@ -16,7 +17,7 @@ typedef struct {
 typedef struct {
     char nome[MAX_NOME_SENSOR];
     Leitura leituras[MAX_LEITURAS];
-    int quantidade;
+    size_t quantidade;  
 } Sensor;
 
 Sensor sensores[MAX_SENSORES];
@@ -31,9 +32,10 @@ int comparar_leituras(const void *a, const void *b) {
 }
 
 void criar_pasta(const char *pasta) {
-    struct stat st = {0};
-    if (stat(pasta, &st) == -1) {
-        mkdir(pasta, 0700);
+    if (CreateDirectory(pasta, NULL) == 0) {
+        if (GetLastError() != ERROR_ALREADY_EXISTS) {
+            printf("Erro ao criar a pasta: %ld\n", GetLastError());
+        }
     }
 }
 
@@ -43,7 +45,7 @@ int encontrar_ou_criar_sensor(const char *nome_sensor) {
             return i;
         }
     }
-    // Sensor novo
+
     strcpy(sensores[quantidade_sensores].nome, nome_sensor);
     sensores[quantidade_sensores].quantidade = 0;
     return quantidade_sensores++;
@@ -51,11 +53,8 @@ int encontrar_ou_criar_sensor(const char *nome_sensor) {
 
 int main() {
     setlocale(LC_ALL, "pt_BR.UTF-8");
-    
-    // Cria a pasta onde os arquivos serão salvos
     criar_pasta("dados_sensores");
-
-    // Abre o arquivo de entrada
+    
     FILE *entrada = fopen("entrada.txt", "r");
     if (!entrada) {
         printf("Erro ao abrir o arquivo de entrada.\n");
@@ -76,7 +75,7 @@ int main() {
     fclose(entrada);
 
     for (int i = 0; i < quantidade_sensores; i++) {
-        qsort(sensores[i].leituras, sensores[i].quantidade, sizeof(Leitura), comparar_leituras);
+        qsort(sensores[i].leituras, (size_t)sensores[i].quantidade, sizeof(Leitura), comparar_leituras);
 
         char nome_arquivo[MAX_NOME_SENSOR + 25];
         sprintf(nome_arquivo, "dados_sensores/%s.txt", sensores[i].nome);
@@ -87,12 +86,14 @@ int main() {
             continue;
         }
 
-        for (int j = 0; j < sensores[i].quantidade; j++) {
+        for (size_t j = 0; j < sensores[i].quantidade; j++) {  
             fprintf(saida, "%ld %s %.2f\n", sensores[i].leituras[j].timestamp, sensores[i].nome, sensores[i].leituras[j].valor);
         }
 
         fclose(saida);
-        printf("Arquivo %s criado com %d leituras.\n", nome_arquivo, sensores[i].quantidade);
+
+        unsigned long quantidade = (unsigned long)sensores[i].quantidade;
+        printf("Arquivo %s criado com %lu leituras.\n", nome_arquivo, quantidade); 
     }
 
     return 0;
