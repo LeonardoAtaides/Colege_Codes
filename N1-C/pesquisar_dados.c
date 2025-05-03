@@ -76,7 +76,7 @@ int main() {
 
     long timestamp_desejado = capturar_timestamp_valido();
 
-    char nome_arquivo[MAX_NOME_SENSOR + 25]; // Ajuste o tamanho para incluir a pasta e o nome do arquivo
+    char nome_arquivo[MAX_NOME_SENSOR + 25];
     sprintf(nome_arquivo, "dados_sensores/%s.txt", nome_sensor);
 
     FILE *arquivo = fopen(nome_arquivo, "r");

@@ -2,11 +2,19 @@
 #include <stdlib.h>
 #include <time.h>
 #include <locale.h>
+#include <string.h>
 
-#define NUM_SENSORES 5
+#define NUM_DE_SENDORES 5
 #define NUM_LEITURAS_POR_SENSOR 1000
+#define TOTAL_LEITURAS (NUM_DE_SENDORES * NUM_LEITURAS_POR_SENSOR)
 
-const char* sensores[NUM_SENSORES] = {"TEMP", "PRES", "VIBR", "UMID", "FLUX"};
+const char* sensores[NUM_DE_SENDORES] = {"TEMP", "PRES", "VIBR", "UMID", "FLUX"};
+
+typedef struct {
+    time_t timestamp;
+    char sensor[10];
+    float valor;
+} Leitura;
 
 time_t gerar_timestamp_aleatorio(int dia, int mes, int ano) {
     struct tm t;
@@ -31,6 +39,15 @@ time_t gerar_timestamp_aleatorio(int dia, int mes, int ano) {
     return inicio + rand() % (fim - inicio + 1);
 }
 
+void embaralhar_dados_aleatoriamente(Leitura* leituras, int n) {
+    for (int i = n - 1; i > 0; i--) {
+        int j = rand() % (i + 1);
+        Leitura temp = leituras[i];
+        leituras[i] = leituras[j];
+        leituras[j] = temp;
+    }
+}
+
 int main() {
     setlocale(LC_ALL, "pt_BR.UTF-8");
 
@@ -38,24 +55,40 @@ int main() {
     printf("Digite a data (dd mm aaaa): ");
     scanf("%d %d %d", &dia, &mes, &ano);
 
-    FILE *arquivo = fopen("entrada.txt", "w");
-    if (!arquivo) {
-        printf("Erro ao criar o arquivo de entrada.\n");
+    Leitura* leituras = malloc(TOTAL_LEITURAS * sizeof(Leitura));
+    if (!leituras) {
+        printf("Erro ao alocar memória.\n");
         return 1;
     }
 
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
 
-    for (int i = 0; i < NUM_SENSORES; i++) {
+
+    int idx = 0;
+    for (int i = 0; i < NUM_DE_SENDORES; i++) {
         for (int j = 0; j < NUM_LEITURAS_POR_SENSOR; j++) {
-            time_t timestamp = gerar_timestamp_aleatorio(dia, mes, ano);
-            float valor = ((float)rand()/(float)(RAND_MAX)) * 100.0; // valor entre 0.0 e 100.0
-
-            fprintf(arquivo, "%ld %s %.2f\n", timestamp, sensores[i], valor);
+            leituras[idx].timestamp = gerar_timestamp_aleatorio(dia, mes, ano);
+            strcpy(leituras[idx].sensor, sensores[i]);
+            leituras[idx].valor = ((float)rand() / RAND_MAX) * 100.0f;
+            idx++;
         }
     }
-    
+
+    embaralhar_dados_aleatoriamente(leituras, TOTAL_LEITURAS);
+
+    FILE *arquivo = fopen("entrada.txt", "w");
+    if (!arquivo) {
+        printf("Erro ao criar o arquivo de entrada.\n");
+        free(leituras);
+        return 1;
+    }
+
+    for (int i = 0; i < TOTAL_LEITURAS; i++) {
+        fprintf(arquivo, "%ld %s %.2f\n", leituras[i].timestamp, leituras[i].sensor, leituras[i].valor);
+    }
+
     fclose(arquivo);
+    free(leituras);
 
     printf("Arquivo 'entrada.txt' gerado com sucesso!\n");
     return 0;
